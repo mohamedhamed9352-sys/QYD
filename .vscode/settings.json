@@ -1,0 +1,11 @@
+{
+  "java.test.config": [
+    {
+      "name": "TestNG Suite",
+      "projectName": "my-app",
+      "workingDirectory": "${workspaceFolder}",
+      "args": "-testng testng.xml"
+    }
+  ],
+  "java.test.defaultConfig": "TestNG Suite"
+}

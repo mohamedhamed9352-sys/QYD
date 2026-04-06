@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Qoyod – Login</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+          font-family: 'Segoe UI', sans-serif;
+          background: #f4f6f9;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+        .topbar {
+          position: fixed;
+          top: 0; left: 0; right: 0;
+          height: 56px;
+          background: #fff;
+          border-bottom: 1px solid #e5e7eb;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 24px;
+          z-index: 100;
+        }
+        .topbar img { height: 34px; }
+        .topbar-actions { display: flex; gap: 10px; }
+        .topbar-actions button {
+          padding: 7px 16px;
+          border-radius: 7px;
+          font-size: 13px;
+          font-weight: 500;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        #btn-help {
+          background: transparent;
+          border: 1.5px solid #d1d5db;
+          color: #374151;
+          type: button;
+        }
+        #btn-help:hover { background: #f3f4f6; }
+        #btn-contact {
+          background: #f0f4ff;
+          border: 1.5px solid #c7d2fe;
+          color: #4338ca;
+        }
+        #btn-contact:hover { background: #e0e7ff; }
+
+        .page-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 100%;
+          padding: 80px 16px 40px;
+          gap: 20px;
+        }
+
+        .notice-banner {
+          width: 100%;
+          max-width: 400px;
+          background: #fffbeb;
+          border: 1px solid #fde68a;
+          border-radius: 9px;
+          padding: 12px 16px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+        }
+        .notice-banner p {
+          font-size: 13px;
+          color: #92400e;
+        }
+        #btn-dismiss {
+          flex-shrink: 0;
+          background: transparent;
+          border: 1.5px solid #f59e0b;
+          color: #b45309;
+          border-radius: 6px;
+          padding: 4px 12px;
+          font-size: 12px;
+          font-weight: 500;
+          cursor: pointer;
+        }
+        #btn-dismiss:hover { background: #fef3c7; }
+
+        .card {
+          background: #fff;
+          border-radius: 12px;
+          box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+          padding: 40px 36px;
+          width: 100%;
+          max-width: 400px;
+        }
+        .card h1 {
+          font-size: 22px;
+          font-weight: 600;
+          color: #1a1a2e;
+          margin-bottom: 6px;
+        }
+        .card p.subtitle {
+          font-size: 14px;
+          color: #6b7280;
+          margin-bottom: 28px;
+        }
+        .form-group { margin-bottom: 18px; }
+        label {
+          display: block;
+          font-size: 13px;
+          font-weight: 500;
+          color: #374151;
+          margin-bottom: 6px;
+        }
+        input[type="text"],
+        input[type="password"] {
+          width: 100%;
+          padding: 10px 14px;
+          border: 1.5px solid #d1d5db;
+          border-radius: 8px;
+          font-size: 14px;
+          color: #111827;
+          transition: border-color 0.2s;
+          outline: none;
+        }
+        input:focus { border-color: #4f6ef7; }
+
+        .forgot-row {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: -10px;
+          margin-bottom: 6px;
+        }
+        #btn-forgot {
+          background: none;
+          border: none;
+          color: #4f6ef7;
+          font-size: 13px;
+          cursor: pointer;
+          padding: 0;
+          font-weight: 500;
+        }
+        #btn-forgot:hover { text-decoration: underline; }
+
+        .error-msg {
+          color: #dc2626;
+          font-size: 13px;
+          margin-top: 10px;
+          display: none;
+        }
+        .field-error {
+          color: #dc2626;
+          font-size: 12px;
+          margin-top: 4px;
+          display: none;
+        }
+        input.input-error {
+          border-color: #dc2626;
+        }
+
+        /* ⚠️ TRICKY ELEMENT: NO id. Must be located via XPath axis methods. */
+        .btn-wrapper { margin-top: 24px; }
+        .btn-wrapper button:disabled {
+          background: #a5b4fc;
+          cursor: not-allowed;
+          opacity: 0.7;
+        }
+        .btn-wrapper button {
+          width: 100%;
+          padding: 11px;
+          background: #4f6ef7;
+          color: #fff;
+          border: none;
+          border-radius: 8px;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .btn-wrapper button:hover { background: #3a56d4; }
+
+        .divider {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin: 20px 0 16px;
+        }
+        .divider hr { flex: 1; border: none; border-top: 1px solid #e5e7eb; }
+        .divider span { font-size: 12px; color: #9ca3af; }
+
+        .social-row {
+          display: flex;
+          gap: 10px;
+        }
+        .social-row button {
+          flex: 1;
+          padding: 9px 8px;
+          border: 1.5px solid #d1d5db;
+          border-radius: 8px;
+          background: #fff;
+          font-size: 13px;
+          font-weight: 500;
+          color: #374151;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .social-row button:hover { background: #f9fafb; }
+        #btn-google { display: flex; align-items: center; justify-content: center; gap: 6px; }
+        #btn-microsoft { display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+        #success-screen { display: none; text-align: center; }
+        #success-screen .check-icon {
+          width: 64px; height: 64px;
+          background: #dcfce7;
+          border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          margin: 0 auto 20px;
+        }
+        #success-screen .check-icon svg { width: 32px; height: 32px; }
+        #success-screen h2 { font-size: 20px; font-weight: 600; color: #15803d; margin-bottom: 8px; }
+        #success-screen p { font-size: 14px; color: #6b7280; }
+        #success-screen .username-display { font-weight: 600; color: #111827; }
+
+        .footer-note {
+          font-size: 12px;
+          color: #9ca3af;
+          text-align: center;
+          margin-top: 20px;
+        }
+        .footer-note button {
+          background: none;
+          border: none;
+          color: #4f6ef7;
+          font-size: 12px;
+          cursor: pointer;
+          font-weight: 500;
+          padding: 0;
+        }
+        .footer-note button:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<!-- TOP NAV BAR -->
+<div class="topbar">
+    <img src="https://www.qoyod.com/wp-content/uploads/Asset-33.png" alt="Qoyod Logo" id="qoyod-watermark-logo" />
+    <div class="topbar-actions">
+        <button id="btn-help" type="button">Help</button>
+        <button id="btn-contact" type="button">Contact Us</button>
+    </div>
+</div>
+
+
+
+
+<!-- NOTICE BANNER -->
+<div class="notice-banner" id="notice-banner">
+    <p id="notice-text">🔒 For your security, sessions expire after 30 minutes of inactivity.</p>
+    <button id="btn-dismiss" type="button">Dismiss</button>
+</div>
+
+<!-- LOGIN CARD -->
+<div class="card">
+    <div id="login-form-container">
+        <h1 id="login-title">Welcome back</h1>
+        <p class="subtitle" id="login-subtitle">Sign in to your Qoyod account</p>
+
+        <div class="form-group" id="username-group">
+            <label for="username-input" id="username-label">Username</label>
+            <input type="text" id="username-input" name="username" placeholder="Enter your username" autocomplete="off" />
+            <p class="field-error" id="username-error">Username is required.</p>
+        </div>
+
+        <div class="form-group" id="password-group">
+            <label for="password-input" id="password-label">Password</label>
+            <input type="password" id="password-input" name="password" placeholder="Enter your password" />
+            <p class="field-error" id="password-error">Password is required.</p>
+        </div>
+
+        <div class="forgot-row">
+            <button id="btn-forgot" type="button">Forgot password?</button>
+        </div>
+
+        <p class="error-msg" id="error-message">Invalid username or password. Please try again.</p>
+
+        <!--
+          ⚠️ CHALLENGE ELEMENT — NO id attribute.
+          Must be located via XPath axis methods, e.g.:
+            //div[@id='password-group']/following-sibling::div[@class='btn-wrapper']/button
+            //div[@id='submit-btn-wrapper']/button
+            //input[@id='password-input']/ancestor::div[@class='card']//button[@data-action='submit-login']
+        -->
+        <div class="btn-wrapper">
+            <button type="button" disabled>
+                <span id="sign-in-label">Checking session...</span>
+            </button>
+        </div>
+
+        <!-- Decoy: same structure, inside login-form-container, hidden -->
+        <div class="btn-wrapper" style="display:none">
+            <button type="button">placeholder</button>
+        </div>
+
+        <div class="divider">
+            <hr /><span>or continue with</span><hr />
+        </div>
+
+        <div class="social-row">
+            <button id="btn-google" type="button">
+                <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.29-8.16 2.29-6.26 0-11.57-3.59-13.46-8.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+                Google
+            </button>
+            <button id="btn-microsoft" type="button">
+                <svg width="16" height="16" viewBox="0 0 21 21"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg>
+                Microsoft
+            </button>
+        </div>
+    </div>
+
+    <!-- SUCCESS SCREEN -->
+    <div id="success-screen">
+        <div class="check-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+            </svg>
+        </div>
+        <h2 id="success-heading">You're logged in successfully!</h2>
+        <p id="success-message">Welcome, <span class="username-display" id="logged-in-username"></span>. You have been authenticated.</p>
+    </div>
+</div>
+
+<p class="footer-note">
+    Don't have an account? <button id="btn-register" type="button">Sign up</button>
+</p>
+
+</div>
+
+<script>
+    const VALID_USERNAME = 'qoyod_user';
+    const VALID_PASSWORD = 'Test@1234';
+
+    const signInBtn = document.querySelector('#sign-in-label').parentElement;
+
+    setTimeout(function () {
+      signInBtn.disabled = false;
+      document.getElementById('sign-in-label').textContent = 'Sign In';
+    }, 3000);
+
+    const btn = signInBtn;
+    const usernameInput = document.getElementById('username-input');
+    const passwordInput = document.getElementById('password-input');
+    const errorMsg = document.getElementById('error-message');
+    const loginContainer = document.getElementById('login-form-container');
+    const successScreen = document.getElementById('success-screen');
+    const loggedInUsername = document.getElementById('logged-in-username');
+
+    btn.addEventListener('click', function () {
+      const u = usernameInput.value.trim();
+      const p = passwordInput.value.trim();
+
+      const usernameError = document.getElementById('username-error');
+      const passwordError = document.getElementById('password-error');
+
+      // reset
+      usernameError.style.display = 'none';
+      passwordError.style.display = 'none';
+      usernameInput.classList.remove('input-error');
+      passwordInput.classList.remove('input-error');
+      errorMsg.style.display = 'none';
+
+      let hasError = false;
+
+      if (!u) {
+        usernameError.style.display = 'block';
+        usernameInput.classList.add('input-error');
+        hasError = true;
+      }
+      if (!p) {
+        passwordError.style.display = 'block';
+        passwordInput.classList.add('input-error');
+        hasError = true;
+      }
+      if (hasError) return;
+
+      if (u === VALID_USERNAME && p === VALID_PASSWORD) {
+        loggedInUsername.textContent = u;
+        loginContainer.style.display = 'none';
+        successScreen.style.display = 'block';
+        document.getElementById('success-heading').textContent = '';
+        document.getElementById('success-message').style.visibility = 'hidden';
+        setTimeout(function () {
+          document.getElementById('success-heading').textContent = "You're logged in successfully!";
+          document.getElementById('success-message').style.visibility = 'visible';
+        }, 3000);
+      } else {
+        errorMsg.style.display = 'block';
+      }
+    });
+
+    document.getElementById('btn-dismiss').addEventListener('click', function () {
+      document.getElementById('notice-banner').style.display = 'none';
+    });
+
+    usernameInput.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+    passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') btn.click(); });
+</script>
+</body>
+</html>
