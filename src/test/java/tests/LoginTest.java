@@ -4,7 +4,7 @@ import pages.LoginBase;
 
 public class LoginTest extends BaseTest {
 
-    @Test(description = "Test successful login with valid credentials", priority = 1)
+    @Test(description = "Test successful login with correct credentials", priority = 1)
     public void testSuccessfulLogin() {
         LoginBase loginPage = new LoginBase(driver);
         loginPage.loginWithValidCredentials();
