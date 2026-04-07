@@ -8,6 +8,7 @@ public class LoginTest extends BaseTest {
     public void testSuccessfulLogin() {
         LoginBase loginPage = new LoginBase(driver);
         loginPage.loginWithValidCredentials();
+        loginPage.getPopupHeadingtext();
         loginPage.assertSuccessfulLogin();
     }
 

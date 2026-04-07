@@ -20,6 +20,7 @@ public class LoginBase {
     private By passworderrorMessage = By.id("password-error");
     private By invalidCredentialsError = By.id("error-message");
     private By successMessage = By.id("success-message");
+    private By successheadingtxt = By.id("success-heading");
     private final WebDriverWait wait;
 
 
@@ -38,6 +39,11 @@ public class LoginBase {
 
     public void clickLogin() {
         wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
+    }
+
+     public String getPopupHeadingtext () {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(successheadingtxt));
+        return driver.findElement(successheadingtxt).getText();
     }
 
     public String getInvalidCredentialsErrorMessage() {
